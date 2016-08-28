@@ -967,11 +967,10 @@
     Opal.update_ancestors_cache(includer);
     Opal._bridge(includer, module);
 
-    // methods = module.$instance_methods();
-    methods = Object.keys(module.$$methods);
+    methods = module.$instance_methods();
 
     for (i = methods.length - 1; i >= 0; i--) {
-      Opal.update_method_cache(module, includer, methods[i])
+      Opal.update_method_cache(module, includer, '$'+methods[i])
     }
 
     Opal.donate_constants(module, includer);
@@ -1892,8 +1891,9 @@
     if (typeof(body) !== "function" || body.$$stub) {
       var ancestor = obj.$$super;
 
+
       while (typeof(body) !== "function" && ancestor) {
-        body     = ancestor[old_id];
+        body     = ancestor.$$proto[old_id];
         ancestor = ancestor.$$super;
       }
 
